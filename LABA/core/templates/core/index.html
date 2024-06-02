@@ -1,0 +1,74 @@
+{% extends 'core/base.html' %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+<div class="px-6 py-6">
+    <div class="search-container flex justify-center my-10">
+        <form action="/search" method="GET" class="w-1/2 flex">
+            <div class="input-container flex-grow">
+                <input type="search" name="q" placeholder="Search..." class="w-full p-4 text-lg border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-teal-500">
+            </div>
+            <div class="button-container">
+                <button type="submit" class="px-6 py-4 text-lg font-semibold bg-teal-500 text-white rounded-r-lg hover:bg-teal-700">Search</button>
+            </div>
+        </form>
+    </div>
+
+    {% if not request.user.is_staff and not request.user.is_super %}
+        You are a client, not staff or admin
+
+    {% else %}
+
+        You are staff or admin
+
+    {% endif %}
+    <form method="POST" action="{% url 'core:show_time' %}">
+    {% csrf_token %}
+    <input type="hidden" name="timezone" id="timezone">
+    <button type="submit">Показать время</button>
+    </form>
+
+
+
+
+    <div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <h2 class="mb-12 text-2xl text-center">Toys</h2>
+        <div class="grid grid-cols-3 gap-3">
+            {% for item in items %}
+                <div>
+                    <a href="{% url 'toys:create_toy_detail' item.id  %}">
+                        <div>
+                            <img src="{{ item.image.url }}" class="rounded-t-xl">
+                        </div>
+
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">Name:{{ item.name }}</h2>
+                            <p class="text-gray-500">Price: {{ item.price }}</p>
+                            <p class="text-gray-500">Stocks: {{ item.amount }}</p>
+
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+ 
+
+    <h1>Latest News</h1>
+
+     <div>
+                        <div>
+                            <img src="{{ last_news.image.url }}" class="rounded-t-xl">
+                        </div>
+
+                        <div class="p-6 bg-white rounded-b-xl">
+                            <h2 class="text-2xl">{{ last_news.article }}</h2>
+                            <p class="text-gray-500">Description: {{ last_news.text }}</p>
+                        </div>
+                </div>
+
+
+     
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="questions-list">
+    {% for question in All_questions %}
+    <div class="question">
+        <h2 class="question-title"> <strong>Question:</strong>  {{ question.question }}</h2>
+        <div class="question-details">
+            <p class="question-answer"> <strong>Answer:</strong>  {{ question.answer }}</p>
+            <p class="question-date"><strong>Date:</strong> {{ question.date }}</p>
+        </div>
+    </div>
+    <br><br><br><br>
+    
+    {% endfor %}
+</div>
+
+{% endblock %}

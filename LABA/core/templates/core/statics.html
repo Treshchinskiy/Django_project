@@ -1,0 +1,22 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Statics{% endblock %}
+
+{% block content %}
+
+<p>Средний возраст пользователя: {{ average_age }}</p>
+
+<div class="mt-12 text-center">
+           <h2 class="text-2xl">Sales Distribution</h2>
+           <img src="{{ img_url }}" alt="Sales Distribution">
+</div>
+
+
+<div class="mt-12 text-center">
+           <h2 class="text-2xl">Sales Distribution</h2>
+           <img src="{{ img_url2 }}" alt="Sales Distribution">
+</div>
+
+
+
+{% endblock %}

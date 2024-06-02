@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">Info about customers</h2>
+    <div class="grid grid-cols-3 gap-3">
+        {% for user_info in user_info_list %}
+            <div>
+                <div class="p-6 bg-white rounded-b-xl">
+                    <h2 class="text-2xl">Name: {{ user_info.user.username }}</h2>
+                    <p class="text-gray-500">Toy names:</p>
+                    <ul>
+                        {% for toy_name in user_info.orders %}
+                            <li>{{ toy_name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <p class="text-gray-500">Total sum: {{ user_info.total_sum }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="mt-12 text-center">
+           <h2 class="text-2xl">Sales Distribution</h2>
+           <img src="{{ img_url }}" alt="Sales Distribution">
+</div>
+
+
+{% endblock %}

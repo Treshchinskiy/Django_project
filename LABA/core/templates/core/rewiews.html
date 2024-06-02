@@ -1,0 +1,50 @@
+{% extends 'core/base.html' %}
+
+
+{% block content %}
+<div class="questions-list">
+    {% for rev in reviews %}
+    <div class="question">
+            <h1 class="question-title">   {{ rev.client_id.username }} , {{rev.stars}} stars</h1>
+        <div class="question-details">
+            <p class="question-answer">   {{ rev.rewiew }}</p>
+            <p> {{ rev.date }}</p>
+        </div>
+    </div>
+    <br><br><br><br>
+    
+    {% endfor %}
+</div>
+
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+        <div class="text-center">
+
+        {% if request.user.is_staff or request.user.is_superuser %}
+
+
+
+        {% else %}
+            {% if request.user.is_authenticated %}
+                {% if request.user.has_rewiews %}
+                <a href="/add_comment" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
+                   Change comment
+                 </a>
+                {% else %}
+                <a href="/add_comment" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
+                    Add comment
+                </a>
+               {% endif %}
+                
+            {% else %}
+            <a href="/login" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition-colors duration-300">
+                Add comment
+            </a>
+            {% endif %}
+        {% endif %}
+        
+        </div>
+    </div>
+
+
+{% endblock %}

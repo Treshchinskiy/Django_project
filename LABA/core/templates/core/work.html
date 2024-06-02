@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+
+{% if request.user.is_superuser %}
+    <div  class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white w-1/6 my-3 mx-auto p-3 bg-gray-50 rounded-xl">
+              <form method="post" action="add_vacancy/">
+                  {% csrf_token %}
+             <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Add Vacancy</button>
+
+                </form>
+        </div>
+{% endif %}
+
+<div class="questions-list">
+    {% for question in Works %}
+    <div class="question">
+        <h1 class="question-title">{{ question.proffesion }}</h1>
+        <div class="question-details">
+            <p class="question-answer">{{ question.description }}</p>
+        </div>
+    </div>
+    <br>
+
+    {% if request.user.is_superuser %}
+        <div class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white w-1/6 my-3 mx-auto p-3 bg-gray-50 rounded-xl">
+             <a href= "{% url 'core:update_vacancy' question.id %}">
+                <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Update Vacancy</button>
+            </a>
+        </div>
+
+
+       
+        <div class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white w-1/6 my-3 mx-auto p-3 bg-gray-50 rounded-xl">
+        <a href="{% url 'core:delete_vacancy' question.id %}">
+            <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Delete Vacancy</button>
+        </a>
+        </div>
+
+    {% endif %}
+
+
+    <br><br><br>
+{% endfor %}
+</div>
+
+{% endblock %}
