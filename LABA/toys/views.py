@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import News,Product,Sale
+from .models import News,Product,Sale,Korzina
 from .forms import ProductForm,ToyOrderForm
 from core.models import Zakazchik
 from django.utils import timezone
@@ -65,14 +65,17 @@ def order(request):
                     return render(request, 'toys/order_form.html', {'form': form})
                     
             z, created = Zakazchik.objects.get_or_create(user=request.user)    
-            z.amount_zakazov += 1
+            #z.amount_zakazov += 1
             z.save()
             
-            q = Sale(product_id=toy, quantity=number_of_toys, zakazchik_id=z, order_date=timezone.now(), delivery_date=timezone.now()+timedelta(weeks=1), promocode=promocode1)
+
+            #q = Sale(product_id=toy, quantity=number_of_toys, zakazchik_id=z, order_date=timezone.now(), delivery_date=timezone.now()+timedelta(weeks=1), promocode=promocode1)
+            q=Korzina(product_id=toy, quantity=number_of_toys,user_id=request.user)
             q.save()
-            
+                        
             toy.amount -= number_of_toys
             toy.save()
+            
 
             return redirect('/')
     else:

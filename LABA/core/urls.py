@@ -16,7 +16,15 @@ urlpatterns = [
     path('view_orders/',views.view_orders,name='view_orders'),
     path('sales_info/',views.sales_info,name='sales_info'),
     path('statics/',views.statics,name='statics'),
-    
+
+
+    path('korzina/',views.korzina,name='korzina'),
+    path('korzina_pay/',views.korzina_pay,name='korzina_pay'),
+    path('korzina_change/',views.korzina_change,name='korzina_change'),
+    path('korzina_delete/',views.korzina_delete,name='korzina_delete'),
+
+    path('process_payment/',views.process_payment,name='process_payment'),
+    path('update_amount/',views.update_amount,name='update_amount'),
     
     path('news/',views.news,name='news'),
     path('questions/',views.questions,name='questions'),

@@ -1,0 +1,23 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-6 text-2xl text-center">Изменить количество для {{ item.product_id.name }}</h2>
+    
+    <form method="POST" action="{% url 'core:update_amount' %}" class="space-y-4">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ item.id }}">
+        
+        <div>
+            <label for="new_quantity" class="block text-lg font-semibold text-gray-700">Новое количество</label>
+            <input type="number" id="new_quantity" name="new_quantity" min="1" required class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Введите новое количество">
+        </div>
+        
+
+        <div class="flex justify-between">
+            <button type="submit" class="px-6 py-3 text-lg font-semibold bg-green-500 text-white rounded-xl hover:bg-green-700">Изменить</button>
+            <a href="{% url 'core:korzina' %}" class="px-6 py-3 text-lg font-semibold bg-gray-500 text-white rounded-xl hover:bg-gray-700">Отмена</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

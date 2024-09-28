@@ -28,6 +28,11 @@
             <a href="/" class="text-xl font-semibold">Puddle</a>
 
             <div class="space-x-6">
+                {% if request.user.is_authenticated %}
+                <a href="/korzina/" class="text-lg font-semibold hover:text-gray-500">Korzina</a>
+                {% endif %}
+                {% if request.user.is_authenticated %}
+                
             {% if not request.user.is_staff and not request.user.is_super %}
                        <a href="/view_orders/" class="text-lg font-semibold hover:text-gray-500">Orders</a>
 
@@ -38,6 +43,8 @@
 
 
               {% endif %}
+              {% endif %}
+
                 <a href="/translator/" class="text-lg font-semibold hover:text-gray-500">Translator</a>
                 <a href="/second_api/" class="text-lg font-semibold hover:text-gray-500">Second API</a>
 
