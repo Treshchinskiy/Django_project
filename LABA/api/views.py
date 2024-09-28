@@ -11,15 +11,14 @@ import json
 
 #google-t5/t5-small
 #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 - token
-
-class HuggingFaceAPIView(APIView):  
+class HuggingFaceAPIView(APIView):
     def post(self, request):
-        input_text = request.POST.get('input-text', '')
+        input_text = request.data.get('input-text', '')
 
         api_url = "https://api-inference.huggingface.co/models/t5-small"
 
+        api_token = "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"
 
-        api_token = "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"
         headers = {
             "Authorization": f"Bearer {api_token}"
         }
@@ -31,17 +30,23 @@ class HuggingFaceAPIView(APIView):
         response = requests.post(api_url, headers=headers, json=data)
 
         if response.status_code == 200:
-            result = response.json()
-            transformed_text = result[0]['translation_text']
+            try:
+                result = response.json()
+                if isinstance(result, list) and len(result) > 0:
+                    transformed_text = result[0].get('translation_text', 'No translation found.')
+                else:
+                    transformed_text = "Error: Unexpected response format."
+            except ValueError as e:
+                print(f"Error decoding JSON: {e}")
+                transformed_text = "Error: Unable to decode response."
         else:
-            print(response.status_code)
+            print(f"Error {response.status_code}: {response.text}")
             transformed_text = "Error: Unable to process the text."
 
         return render(request, 'api/translator.html', {
             'input_text': input_text,
             'transformed_text': transformed_text
         })
-
 
     def get(self, request):
         return render(request, 'api/translator.html')

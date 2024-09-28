@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-6 text-2xl text-center">Введите реквизиты своей банковской карточки</h2>
+    
+    <!-- Форма для ввода реквизитов -->
+    <form method="POST" action="{% url 'core:process_payment' %}" class="space-y-4">
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ product_id }}">
+
+        <!-- Поле для ввода номера карточки -->
+        <div>
+            <label for="card_number" class="block text-lg font-semibold text-gray-700">Номер карточки</label>
+            <input type="text" id="card_number" name="card_number" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="Введите номер карточки">
+        </div>
+
+        <!-- Поле для ввода срока действия карточки -->
+        <div>
+            <label for="expiry_date" class="block text-lg font-semibold text-gray-700">Срок действия</label>
+            <input type="text" id="expiry_date" name="expiry_date" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="ММ/ГГ">
+        </div>
+
+        <!-- Поле для ввода CVV -->
+        <div>
+            <label for="cvv" class="block text-lg font-semibold text-gray-700">CVV</label>
+            <input type="text" id="cvv" name="cvv" class="mt-1 block w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500" placeholder="CVV">
+        </div>
+
+        <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-gray-700">Оплатить</button>
+    </form>
+</div>
+{% endblock %}

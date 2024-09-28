@@ -1,7 +1,7 @@
+from typing import Any
 from django.db import models
 from core.models import User, Zakazchik
 from django.core.validators import MinValueValidator, MaxValueValidator
-#промокоды еще нужны но там отдельная пизда
 
 
 
@@ -65,12 +65,6 @@ class ProductType(models.Model):
 
 
 
-
-
-
-
-
-
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
     name=models.CharField(max_length=200)
@@ -113,5 +107,44 @@ class Sale(models.Model):
     promocode=models.CharField(max_length=100,default='')
 
 
+class Company(models.Model):
+    id=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    video = models.FileField(upload_to='videos/')
+    logo=models.ImageField(upload_to='product_images/',blank=True,null=True,default='product_images/FCxARCPWYAEi9ux.jpg')
+    setrificate=models.ImageField(upload_to='product_images/',blank=True,null=True,default='product_images/FCxARCPWYAEi9ux.jpg')
+    text=models.TextField()
+    history=models.TextField()
 
 
+
+class FriendCompanies(models.Model):
+    id=models.AutoField(primary_key=True)
+    name=models.CharField(max_length=50)
+    image=models.ImageField(upload_to='product_images/',blank=True,null=True,default='product_images/FCxARCPWYAEi9ux.jpg')
+    link = models.URLField(max_length=200)
+
+    def __str__(self) -> str:
+        return self.name
+
+
+
+class Korzina(models.Model):
+    id=models.AutoField(primary_key=True)
+    quantity=models.IntegerField()
+    product_id=models.ForeignKey(Product, on_delete=models.CASCADE)
+    user_id=models.ForeignKey(User,on_delete=models.CASCADE,default=None)
+
+    def __str__(self) -> str:
+        return self.product_id.name
+
+
+class FAQ(models.Model):
+    id=models.AutoField(primary_key=True)
+    question = models.CharField(max_length=100)
+    answer = models.TextField()
+    date=models.DateField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.question
+    

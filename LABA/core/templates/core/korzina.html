@@ -1,0 +1,48 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+
+<div class="mt-6 px-6 py-12 bg-gray-100 rounded-xl">
+    <h2 class="mb-12 text-2xl text-center">All toys in your Korzina</h2>
+    <div class="grid grid-cols-3 gap-3">
+        {% for item in korzina %}
+            <div>
+                <div>
+                    <img src="{{ item.product_id.image.url }}" class="rounded-t-xl">
+                </div>
+                <div class="p-6 bg-white rounded-b-xl">
+                    <p class="text-gray-500">Toy name: {{ item.product_id.name }}</p>
+                    <p class="text-gray-500">Quantity: {{ item.quantity }}</p>
+                    <p class="text-gray-500">Toy price: {{ item.product_id.price }}</p>
+
+                    <!-- Flexbox для кнопок -->
+                    <div class="flex justify-between mt-4">
+                        <!-- Кнопка "Pay" -->
+                        <form method="POST" action="{% url 'core:korzina_pay' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ item.id }}">
+                            <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-gray-700">Pay</button>
+                        </form>
+
+                        <!-- Кнопка "Change amount" -->
+<form method="POST" action="{% url 'core:korzina_change' %}">
+    {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{ item.id }}">
+    <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-gray-700">Change amount</button>
+</form>
+
+
+                        <!-- Кнопка "Delete" -->
+                        <form method="POST" action="{% url 'core:korzina_delete' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="product_id" value="{{ item.id }}">
+                            <button type="submit" class="px-6 py-3 text-lg font-semibold bg-red-500 text-white rounded-xl hover:bg-gray-700">Delete</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

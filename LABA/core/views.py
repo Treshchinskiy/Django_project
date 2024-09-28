@@ -1,9 +1,10 @@
+from datetime import timedelta
 from django.shortcuts import render,redirect, get_object_or_404
 from .forms import SignupForm
 from django.contrib.auth import login
 from django.contrib.auth import get_user_model
 from core.models import User,Zakazchik
-from toys.models import News, Questions, Vacancy, Product, Rewiews,Sale,Promocode
+from toys.models import News, Questions, Vacancy, Product, Rewiews,Sale,Promocode, Korzina
 from django.http import HttpResponseForbidden
 from django.contrib import messages
 from .models import Employee
@@ -311,7 +312,117 @@ def statics(request):
     
     return render(request,'core/statics.html', {'average_age': average_age, 'img_url': img_url, 'img_url2': img_url2})
 
+def korzina(request):
+    items = Korzina.objects.filter(user_id=request.user)
+    return render(request,'core/korzina.html', {'korzina': items, 'request': request})
 
+def korzina_pay(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        if not product_id:
+            return redirect('core:korzina')
+
+        # Здесь вы можете перенаправить на процесс платежа или на страницу ввода реквизитов
+        return render(request, 'core/korzina_pay.html', {'product_id': product_id})
+
+    return render(request, 'core/korzina_pay.html')  # Обрабатываем GET-запросы
+
+
+
+def process_payment(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        z = Korzina.objects.filter(id=product_id, user_id=request.user).first()
+        if not z:
+            return redirect('core:korzina')
+
+        zakazchik, created = Zakazchik.objects.get_or_create(user=request.user)    
+        zakazchik.amount_zakazov += 1
+        zakazchik.save()
+
+        q = Sale(
+            product_id=z.product_id,
+            quantity=z.quantity,
+            zakazchik_id=zakazchik,
+            order_date=timezone.now(),
+            delivery_date=timezone.now() + timedelta(weeks=1)
+        )
+        q.save()
+        z.delete()
+
+        return redirect('core:korzina')
+
+    return redirect('core:korzina')
+
+
+def korzina_change(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        
+
+        item = Korzina.objects.filter(id=product_id, user_id=request.user).first()
+        if not item:
+            return redirect('core:korzina')
+
+        return render(request, 'core/change_amount.html', {'item': item})
+
+    return redirect('core:korzina')
+
+
+
+def update_amount(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        new_quantity = request.POST.get('new_quantity')
+        print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
+        print('product_id', product_id, type(product_id))
+        print('new_quantity', new_quantity,type(new_quantity))
+        print(Korzina.objects.all().first().id)
+
+        # Логика проверки и обновления
+        item = Korzina.objects.filter(id=product_id).first()
+        product = Product.objects.get(id=item.product_id.id)
+
+        print(item.product_id.name)
+        print(product.name)
+        print('PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP')
+
+
+        if item and product:
+            if int(new_quantity) <= product.amount:
+                product.amount = product.amount - int(new_quantity) + int(item.quantity)
+                item.quantity = new_quantity
+                item.save()
+                product.save()
+            
+
+        return redirect('core:korzina')
+
+    return redirect('core:korzina')
+
+
+
+
+def korzina_delete(request):
+    if request.method == "POST":
+        product_id = request.POST.get('product_id')
+        
+        print('product_id', product_id, type(product_id))
+
+        # Ищем элемент в корзине по product_id
+        item = Korzina.objects.filter(id=product_id).first()
+        product = Product.objects.get(id=item.product_id.id)
+        
+        product.amount += item.quantity
+        product.save()
+
+        if item:
+            item.delete()
+            print('Товар успешно удален из корзины')
+
+        return redirect('core:korzina')
+
+    return redirect('core:korzina')
 
 
 def search(request):

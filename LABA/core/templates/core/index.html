@@ -15,13 +15,17 @@
         </form>
     </div>
 
-    {% if not request.user.is_staff and not request.user.is_super %}
+    {% if request.user.is_authenticated  %}
+        {% if not request.user.is_staff and not request.user.is_super %}
         You are a client, not staff or admin
 
-    {% else %}
-
+        {% else %}
         You are staff or admin
 
+        {% endif %}
+    
+    {% else %}
+        You are not authenticated
     {% endif %}
     <form method="POST" action="{% url 'core:show_time' %}">
     {% csrf_token %}

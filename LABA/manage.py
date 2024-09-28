@@ -2,12 +2,17 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-
+#zapas ветка
 
 def main():
-    """Run administrative tasks."""
-    """Run administrative tasks."""
+    """Run administrative tasks.
+    
+    Логотип добавить и банер рекламы(несколько картинок)
 
+    Список парнеров с данными из класса и ссылкой
+
+    
+    """
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LABA.settings')
     try:
         from django.core.management import execute_from_command_line
@@ -20,5 +25,7 @@ def main():
     execute_from_command_line(sys.argv)
 
 
+
 if __name__ == '__main__':
     main()
+
